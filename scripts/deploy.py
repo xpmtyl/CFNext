@@ -9,6 +9,8 @@
 可选：
   U       面板 / 订阅路径（UUID）。留空则不写该 binding，沿用 KV 里的配置。
   KV_ID   KV 命名空间 ID，默认沿用 cfe 的命名空间。
+  EDITION 部署形态："明文版"（默认可读、diff 友好）/ "混淆版"。默认 混淆版。
+          注：混淆版里的 DEPLOY_EDITION 上游已预置为「混淆版」，无需手动改标注。
 
 ⚠️ 关键点：ES module 必须用 Content-Type: application/javascript+module，
    否则 Cloudflare 会报 "Cannot use import statement outside a module"。
@@ -24,10 +26,12 @@ SCRIPT = os.environ.get('WORKER_NAME', 'cfe')
 KV_ID = os.environ.get('KV_ID', '43c7b97bffcc4e50b33a9f5904783426')
 U_VAL = os.environ.get('U', '').strip()
 
+EDITION = os.environ.get('EDITION', '混淆版').strip() or '混淆版'
 here = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-src = os.path.join(here, 'CFNext 明文版.js')
+src = os.path.join(here, 'CFNext %s.js' % EDITION)
 if not os.path.exists(src):
     sys.exit('找不到源文件: %s' % src)
+print('edition: %s' % EDITION)
 
 js = open(src, 'rb').read()
 print('source : %s (%d bytes)' % (src, len(js)))

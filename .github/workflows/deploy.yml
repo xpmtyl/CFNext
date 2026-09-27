@@ -9,6 +9,7 @@ on:
     branches: [main]
     paths:
       - "CFNext 明文版.js"
+      - "CFNext 混淆版.js"
       - "scripts/deploy.py"
       - ".github/workflows/deploy.yml"
   workflow_dispatch:
@@ -31,3 +32,4 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
           U: ${{ secrets.U }}
+          EDITION: "混淆版"

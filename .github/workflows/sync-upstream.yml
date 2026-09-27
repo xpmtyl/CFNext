@@ -1,0 +1,49 @@
+name: Sync upstream (PAICNI/CFNext)
+
+# 跟随上游更新：每 6 小时检查一次，有更新就 merge 并 push，
+# push 会触发 deploy.yml 自动重新部署。
+#
+# ⚠️ 必须用 PAT（GH_PAT）push：用 GITHUB_TOKEN push 不会触发其他 workflow。
+
+on:
+  schedule:
+    - cron: "23 */6 * * *"
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure git identity
+        run: |
+          git config user.name "cfnext-bot"
+          git config user.email "cfnext-bot@users.noreply.github.com"
+
+      - name: Fetch upstream
+        run: |
+          git remote add upstream https://github.com/PAICNI/CFNext.git 2>/dev/null || true
+          git fetch upstream main
+          git checkout main
+
+      - name: Merge upstream (上游优先)
+        id: merge
+        run: |
+          if git merge --no-edit -X theirs upstream/main; then
+            echo "result=MERGE_OK" >> $GITHUB_OUTPUT
+          else
+            echo "result=CONFLICT" >> $GITHUB_OUTPUT
+            git merge --abort || true
+            exit 1
+          fi
+
+      - name: Push to origin (PAT -> 触发 deploy)
+        run: |
+          BEFORE=$(git rev-parse HEAD)
+          git remote set-url origin "https://x-access-token:${{ secrets.GH_PAT }}@github.com/xpmtyl/CFNext.git"
+          git push origin main
+          echo "pushed HEAD=$BEFORE"

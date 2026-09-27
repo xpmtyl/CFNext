@@ -1,0 +1,45 @@
+name: Deploy CFNext to Cloudflare
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "CFNext 明文版.js"
+      - "wrangler.toml"
+      - ".github/workflows/deploy.yml"
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install wrangler
+        run: npm i -g wrangler@latest
+
+      - name: Generate src/worker.js from upstream source
+        run: |
+          mkdir -p src
+          cp "CFNext 明文版.js" src/worker.js
+          wc -c src/worker.js
+          head -c 120 src/worker.js; echo
+
+      - name: Inject UUID as secret U
+        if: ${{ secrets.U != '' }}
+        run: printf '%s' "${{ secrets.U }}" | wrangler secret put U
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+
+      - name: Deploy to Workers
+        run: wrangler deploy --keep-vars
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}

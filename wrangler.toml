@@ -1,0 +1,20 @@
+# CFNext —— Cloudflare Worker 部署配置
+# 由 GitHub Actions 自动部署（.github/workflows/deploy.yml）
+# 上游：https://github.com/PAICNI/CFNext  fork：https://github.com/xpmtyl/CFNext
+#
+# 注意：src/worker.js 不入库，由 Actions 从 "CFNext 明文版.js" 现场生成，
+#       这样上游一更新、同步后自动就用新代码部署。
+
+name = "cfe"
+main = "src/worker.js"
+compatibility_date = "2024-09-01"
+
+# account_id 不写死，由 Actions 环境的 CLOUDFLARE_ACCOUNT_ID 提供
+
+# 复用原 cfe 的 KV 命名空间（绑定变量名必须是 K）
+[[kv_namespaces]]
+binding = "K"
+id = "43c7b97bffcc4e50b33a9f5904783426"
+
+# U（面板 / 订阅路径）不写明文，由 Actions 用 wrangler secret put 注入
+[vars]

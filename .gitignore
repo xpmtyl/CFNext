@@ -1,0 +1,4 @@
+# src/worker.js 由 Actions 从 "CFNext 明文版.js" 现场生成，不入库
+src/
+node_modules/
+.wrangler/

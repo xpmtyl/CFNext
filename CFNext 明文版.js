@@ -3633,12 +3633,16 @@ function generateSingbox(cfg, nodes) {
       ? { enabled: true, server_name: host, insecure: true, alpn: alpnArr || ['h2'] }
       : { enabled: true, server_name: host, insecure: true, alpn: alpnArr || ['http/1.1'], utls: { enabled: true, fingerprint: 'chrome' } })
       : { enabled: false };
-    // ★ early data 落地（V2.2.0 提速）：TLS 下的 ws 走 ed=2048 + early_data_header_name，
-    // sing-box 会把首包预发进 Sec-WebSocket-Protocol（服务端已支持解析），减少首包往返；
-    // 明文 ws 与 xhttp 不启用（无收益且 xhttp 本身即双向流）
+    // ★ early data（sing-box 写法，V2.2.0 提速）：用 max_early_data 声明 early data 容量，
+    //   配合 early_data_header_name 把首包预发进 Sec-WebSocket-Protocol（服务端已支持解析），减少首个往返。
+    //   ⚠️ 与 xray 不同：sing-box 的 early data 由自身字段控制，path 里**不能**再写 ?ed=2048
+    //   —— 实测 path 带 ?ed=2048 会让 sing-box 握手失败、全部节点无延迟（GUI.for.SingBox 现象）；
+    //   官方文档明确「Early data is sent in path instead of header by default」，即 path 不应再声明 ed。
+    //   注：xray / mihomo(Clash) 仍保留 path 的 ?ed=2048 写法（各自生成器未改，保持既有行为）。
+    //   明文 ws 与 xhttp 不启用（无收益且 xhttp 本身即双向流）
     const transport = type === 'xhttp' ? { type: 'xhttp', mode: 'stream-one', path } :
       (tls ? {
-        type: 'ws', path: path + '?ed=2048', headers: { Host: host }, early_data_header_name: 'Sec-WebSocket-Protocol'
+        type: 'ws', path, max_early_data: 2048, early_data_header_name: 'Sec-WebSocket-Protocol', headers: { Host: host }
       } : { type: 'ws', path, headers: { Host: host } });
     if (isTrojan) {
       return {

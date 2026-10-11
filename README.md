@@ -2,12 +2,25 @@
 
 > **CFNext —— 部署在 Cloudflare Workers / Pages 的代理订阅管理面板**，单文件同时实现 VLESS / Trojan / XHTTP 多协议代理与图形化配置：`/UUID`（或自定义路径）进入面板，`/sub` 输出订阅；内置节点优选器、节点数量控制、轮询下发、ECH 加密、落地与出站代理及地区 / 运营商 / IP 版本多维筛选，部署即用，绑定 KV 后改完即生效。
 >
-> **[Telegram 交流群](https://t.me/SZ_PAI)**　**[YouTube 频道](https://www.youtube.com/@PAI_CN)**
-
+> **[✈ Telegram 交流群](https://t.me/SZ_PAI)**
+> **[📺️ YouTube 频道](https://www.youtube.com/@PAI_CN)**
+> **[▶️ 新版本部署教程](https://youtu.be/JKrLti2_IvQ)**
+> **[▶️ 视频使用教程](https://youtu.be/1GCZgdGFsk0)**
 <details>
   <summary>✨点击展开更新日志</summary>
 
+# 更新日志 V2.7.2
+## ✨ 更新内容
 
+✨ 更新内容
+1. 环境变量 login 键名兼容单字母 L
+2. 给混淆版/小说混淆版/Pages版构建器都加了 --seed，再次加固
+- 混淆版/混淆Pages版：在交给 terser 之前把 105 个顶层函数声明按种子重排。函数声明有提升语义，所以行为一个字都不变；但 terser 的遍历顺序变了，标识符命名序列就整体重排。实测同一份源码的两个变体 约 96% 的字符不同——不是换个后缀那种表面差异。顶层 const/let/class（有 TDZ）、import 首句、export default 末句一律不动，重排后还会再做一次解析断言。
+- 小说版：种子驱动分片边界、容器切分、容器乱序、承载位点，全变。
+
+### 🐛 BUG 处理
+1.修复「进面板就提示：无法连接服务器 / 右上角状态显示：无法连接」的问题
+---
 # 更新日志 V2.7.1
 
 ### 🐛 BUG 处理

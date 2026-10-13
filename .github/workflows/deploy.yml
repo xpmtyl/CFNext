@@ -8,8 +8,8 @@ on:
   push:
     branches: [main]
     paths:
-      - "CFNext 明文版.js"
-      - "CFNext 混淆版.js"
+      - "CFNext-明文版.js"
+      - "CFNext-混淆版.js"
       - "scripts/deploy.py"
       - ".github/workflows/deploy.yml"
   workflow_dispatch:

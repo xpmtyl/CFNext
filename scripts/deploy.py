@@ -28,7 +28,7 @@ U_VAL = os.environ.get('U', '').strip()
 
 EDITION = os.environ.get('EDITION', '混淆版').strip() or '混淆版'
 here = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-src = os.path.join(here, 'CFNext %s.js' % EDITION)
+src = os.path.join(here, 'CFNext-%s.js' % EDITION)
 if not os.path.exists(src):
     sys.exit('找不到源文件: %s' % src)
 print('edition: %s' % EDITION)

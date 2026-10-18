@@ -7,7 +7,7 @@
 > **[▶️ 3.0 新版本部署教程](https://www.youtube.com/watch?v=CQ8zvWXkZzA)**
 > **[▶️ 2.0 Worker模式视频使用教程](https://youtu.be/1GCZgdGFsk0)**
 >
-# 注意事项！注意事项！注意事项！明文版代码仅作为开源使用，强烈不建议进行线上部署
+# 注意：明文版代码仅作为开源使用，不建议进行线上部署
 
 <details>
   <summary>✨点击展开更新日志</summary>
@@ -371,12 +371,12 @@ Proxy-HK.SenflareLink.Kdns.fr,Proxy-TW.SenflareLink.Kdns.fr,Proxy-JP.SenflareLin
 
 | 形态        | 文件名称                         | 部署目标        | 说明                                       |
 | --------- | ---------------------------- | ----------- | ---------------------------------------- |
-| 单文件·明文版   | `CFNext-明文版-V3.0.0.js`       | Worker      | 面板 + 后端一体，源码可读，**仅供阅读 / 二次开发，不建议直接部署**   |
-| 单文件·混淆版   | `CFNext-混淆版-V3.0.0.js`       | Worker      | 面板 + 后端一体，terser 混淆 + ASCII 化，**日常部署推荐** |
-| 单文件·小说混淆版 | `CFNext-小说混淆版-V3.0.0.js`     | Worker      | 面板 + 后端一体，正文嵌入语料、占比约 66%，体积最大            |
-| 单文件·Pages | `CFNext-混淆Pages版-V3.0.0.zip` | Pages（高级模式） | 单文件混淆版打包为 `_worker.js`，走 Pages 通道        |
-| 分离版·后端    | `CFNext-后端Worker版-V3.0.0.js` | Worker      | 纯节点 / 订阅 / `/api/*`，**无面板、无登录**          |
-| 分离版·前端    | `CFNext-前端Pages版-V3.0.0.zip` | Pages（高级模式） | 面板 UI + 登录 + 多后端管理 + 聚合下发                |
+| 单文件·明文版   | `CFNext-明文版.js`       | Worker      | 面板 + 后端一体，源码可读，**仅供阅读 / 二次开发，不建议直接部署**   |
+| 单文件·混淆版   | `CFNext-混淆版.js`       | Worker      | 面板 + 后端一体，terser 混淆 + ASCII 化，**日常部署推荐** |
+| 单文件·小说混淆版 | `CFNext-小说混淆版.js`     | Worker      | 面板 + 后端一体，正文嵌入语料、占比约 66%，体积最大            |
+| 单文件·Pages | `CFNext-混淆Pages版.zip` | Pages（高级模式） | 单文件混淆版打包为 `_worker.js`，走 Pages 通道        |
+| 分离版·后端    | `CFNext-后端Worker版.js` | Worker      | 纯节点 / 订阅 / `/api/*`，**无面板、无登录**          |
+| 分离版·前端    | `CFNext-前端Pages版.zip` | Pages（高级模式） | 面板 UI + 登录 + 多后端管理 + 聚合下发                |
 
 > **前后端分离版**：前端 Pages 负责面板 / 登录 / 多后端（可跨账户），后端 Wo*rker 只存参数、生成订阅；前端把 `/<入口>/api/*`、`/<入口>/sub/*` 映射到后端并注入 API 密钥。后端不暴露任何独立入口，只能经前端访问*。  
 > **单文件版**：面板与后端一体，一次部署即用，无多后端管理模块。
@@ -480,6 +480,7 @@ Proxy-HK.SenflareLink.Kdns.fr,Proxy-TW.SenflareLink.Kdns.fr,Proxy-JP.SenflareLin
 
 ## 八、致谢
 
-- 致谢 [cmliu/edgetunnel](https://github.com/cmliu/edgetunnel) 等 Cloudflare Worker 代理项目。
+- 感谢 [cmliu/edgetunnel](https://github.com/cmliu/edgetunnel) 等 Cloudflare Worker 代理项目。
+- 感谢 [byJoey/CFnew](https://github.com/byJoey/cfnewl) 。
 - 感谢 mihomo / sing-box 社区与 WARP / MASQUE 协议的公开实现。
 - 感谢 Telegram 交流群与各位用户的反馈。
